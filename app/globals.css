@@ -1,26 +1,555 @@
-@import "tailwindcss";
 
+/* --- Core Setup & Variables --- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0c0c0e;
+  --card-bg: #121214;
+  --input-bg: #222226;
+  --border: #2e2f3b;
+  --text-main: #f8f8f8;
+  --text-dim: #a1a1aa;
+  --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  --accent: #4f9eff;
+  --radius-lg: 1.25rem;
+  --radius-md: 0.75rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Force border-box so padding doesn't expand the width/height */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+  line-height: 1.5; /* Normalized line height */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Layout Components --- */
+.form-modal {
+  display: flex;
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  max-width: 900px;
+  margin: 4rem auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.form-sidebar {
+  background: var(--primary-gradient);
+  padding: 3rem;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-content {
+  padding: 3rem;
+  width: 60%;
+  background-color: var(--card-bg);
+}
+
+/* --- Form Elements (The Fix) --- */
+
+.form-group {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+  color: var(--text-main);
+}
+
+/* Consolidated Input Styling to solve padding issues */
+input, 
+select, 
+textarea {
+  display: block;
+  width: 100%;
+  background-color: var(--input-bg);
+  color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  
+  /* Vertical padding (0.8rem) and Horizontal padding (1.2rem) */
+  padding: 0.8rem 1.2rem !important; 
+  
+  font-size: 1rem;
+  font-family: inherit;
+  line-height: 1.25; /* Prevents text jumping */
+  transition: all 0.2s ease;
+}
+
+/* Specific height fix for Select and Input to ensure parity */
+input, 
+select {
+  height: 3rem; /* Fixed height ensures they look identical */
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Dropdown specific styling */
+select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a1a1aa'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2rem;
+}
+
+/* States */
+input:focus, 
+select:focus, 
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background-color: #1a1b21;
+  box-shadow: 0 0 0 4px rgba(79, 158, 255, 0.1);
+}
+
+input::placeholder {
+  color: #52525b;
+}
+
+/* --- Buttons --- */
+button, .btn-send {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 100px;
+  padding: 0.8rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  float: right;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+button:hover {
+  transform: scale(1.05);
+  background-color: #f4f4f5;
+}
+
+/* Grid helper */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+/* --- Utility --- */
+.text-muted { color: var(--text-dim); }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+
+
+/* globals.css */
+
+/* --- Modern Table Styling (Inspired by Image) --- */
+
+/* Root Table Container */
+.max-w-7xl {
+  background-color: #0a0a0a; /* True dark background */
+  min-height: 100vh;
+}
+
+/* Header Styling */
+h1 {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 2rem !important;
+}
+
+/* Table overrides for Shadcn UI Components */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  color: #e4e4e7;
+}
+
+thead tr {
+  border-bottom: 1px solid #1f1f23 !important;
+  background-color: transparent !important;
+}
+
+th {
+  color: #71717a !important; /* Muted zinc header */
+  font-weight: 500 !important;
+  padding: 1rem !important;
+  text-align: left;
+}
+
+/* Row Styling */
+tbody tr {
+  border-bottom: 1px solid #141417 !important;
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: #111113 !important;
+}
+
+td {
+  padding: 1rem !important;
+  color: #d1d1d6;
+  vertical-align: middle;
+}
+
+/* Highlighted Column (e.g., Department or Status) */
+/* This makes specific cells look like the colored pills in the image */
+td:nth-child(5) {
+  font-weight: 500;
+}
+
+/* Pagination & Action Buttons */
+.btn-primary {
+  background-color: #18181b !important;
+  color: #ffffff !important;
+  border: 1px solid #27272a !important;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #27272a !important;
+  border-color: #3f3f46 !important;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Action Icon (Eye) */
+.hover\:bg-muted:hover {
+  background-color: #27272a !important;
+  color: #ffffff !important;
+}
+
+/* Custom Selects (Filters) */
+select {
+  background-color: #121214 !important;
+  border: 1px solid #27272a !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 2rem 0.5rem 1rem !important;
+  font-size: 0.875rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2371717a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+}
+
+select:focus {
+  outline: none;
+  border-color: #3f3f46 !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+/* Footer / Pagination Text */
+span {
+  color: #71717a;
+  font-size: 0.875rem;
+}
+
+/* --- Responsive Scrollbar for Dark Mode --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+
+/* globals.css - Profile & Logs Extension */
+
+/* --- Profile Container --- */
+.max-w-4xl {
+  background-color: #0c0c0e; /* Deep dark background */
+  min-height: 100vh;
+  padding: 3rem 2rem;
+}
+
+/* Titles */
+h1.text-3xl {
+  font-size: 1.875rem;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+h2.text-2xl {
+  font-size: 1.25rem;
+  color: #ffffff;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Profile Card Grid --- */
+.grid-cols-2 {
+  background-color: #121214; /* Elevated surface */
+  border: 1px solid #1f1f23 !important; /* Subtle border */
+  border-radius: 1rem;
+  padding: 2rem !important;
+  gap: 2rem 1.5rem !important;
+}
+
+/* Profile Items */
+.text-muted-foreground {
+  color: #71717a !important; /* Zinc-400 */
+  font-size: 0.8rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.font-medium {
+  color: #fafafa !important; /* Zinc-50 */
+  font-size: 1rem;
+}
+
+/* --- Logs Table Styling --- */
+/* Target the table specifically within the logs section */
+table.w-full {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #1f1f23 !important;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+/* Remove old gray background and sharp borders */
+thead tr.bg-gray-100 {
+  background-color: #18181b !important; /* Slightly lighter than body */
+}
+
+th.border, td.border {
+  border: none !important; /* Remove heavy standard borders */
+  border-bottom: 1px solid #1f1f23 !important;
+  padding: 1rem 1.25rem !important;
+}
+
+th {
+  color: #71717a !important;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+tbody tr {
+  background-color: #121214;
+}
+
+tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+tbody tr:hover {
+  background-color: #161619; /* Subtle row highlight */
+}
+
+td {
+  color: #d1d1d6;
+  font-size: 0.9rem;
+}
+
+/* No logs fallback text */
+.text-gray-500 {
+  color: #52525b !important;
+  font-style: italic;
+}
+
+/* --- Action Button / Link (if needed) --- */
+/* If you decide to add a 'Back' button later */
+.back-link {
+  color: #71717a;
+  text-decoration: none;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #ffffff;
+}
+
+/* globals.css - SQL Challenge Extension */
+
+/* --- Page Header & Container --- */
+.max-w-7xl {
+  background-color: #0c0c0e;
+  padding: 3rem 2rem;
+}
+
+h1.text-3xl {
+  font-size: 1.875rem;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+/* --- Control Section (Select & Button) --- */
+.flex.gap-4.items-center select {
+  background-color: #121214;
+  border: 1px solid #27272a;
+  color: #fafafa;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  min-width: 280px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2371717a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+}
+
+/* Primary Execute Button */
+button.bg-blue-600 {
+  background-color: #3b82f6 !important; /* Brighter blue for the main action */
+  color: #ffffff !important;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+button.bg-blue-600:hover:not(:disabled) {
+  background-color: #2563eb !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+button.bg-blue-600:disabled {
+  background-color: #1f1f23 !important;
+  color: #52525b !important;
+  cursor: not-allowed;
+}
+
+/* --- SQL Code Editor Box --- */
+pre.bg-gray-900 {
+  background-color: #000000 !important; /* Deeper black for code */
+  border: 1px solid #1f1f23;
+  color: #9cdcfe !important; /* Soft blue/cyan for SQL code */
+  padding: 1.5rem !important;
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
+
+p.font-medium {
+  color: #71717a;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+/* --- Dynamic Result Table --- */
+.overflow-x-auto table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #1f1f23;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+/* Header */
+thead tr.bg-gray-100 {
+  background-color: #18181b !important;
+}
+
+th {
+  color: #71717a !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 1rem !important;
+  border-bottom: 1px solid #1f1f23 !important;
+  text-align: left;
+}
+
+/* Body */
+tbody tr {
+  background-color: #121214 !important; /* Force all rows to dark */
+}
+
+tbody tr:hover {
+  background-color: #161619 !important;
+}
+
+td {
+  padding: 1rem !important;
+  border-bottom: 1px solid #141417 !important;
+  color: #d1d1d6;
+  font-size: 0.9rem;
+}
+
+/* Remove border from last row */
+tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Error Message */
+.text-red-600 {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171 !important;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  margin-top: 1rem;
+}
+
+/* Empty State */
+.text-gray-500 {
+  color: #52525b !important;
+  text-align: center;
+  padding: 2rem;
+}
+
+.center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
