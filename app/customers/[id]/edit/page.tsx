@@ -28,7 +28,7 @@ export default function EditCustomerPage() {
   useEffect(() => {
     async function fetchCustomer() {
       try {
-        const res = await fetch(`http://localhost:8000/api/customers/${id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customers/${id}`);
         if (!res.ok) throw new Error("Customer not found");
 
         const data = await res.json();

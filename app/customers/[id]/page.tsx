@@ -20,7 +20,7 @@ interface CustomerLog {
 }
 
 async function getCustomer(id: string): Promise<Customer | null> {
-  const res = await fetch(`http://localhost:8000/api/customers/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customers/${id}`, {
     cache: "no-store",
   });
   if (!res.ok) return null;
@@ -28,7 +28,7 @@ async function getCustomer(id: string): Promise<Customer | null> {
 }
 
 async function getCustomerLogs(id: string): Promise<CustomerLog[]> {
-  const res = await fetch(`http://localhost:8000/api/customers/${id}/logs`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customers/${id}/logs`, {
     cache: "no-store",
   });
   if (!res.ok) return [];

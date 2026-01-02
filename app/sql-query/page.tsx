@@ -53,7 +53,7 @@ export default function SQLPage() {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:8000/api/sql-query", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sql-query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sql: sqlQueries[selectedQuery] }),

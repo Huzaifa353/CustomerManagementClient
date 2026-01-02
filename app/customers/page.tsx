@@ -51,7 +51,7 @@ export default function CustomersPage() {
         if (countryFilter) query.append("country", countryFilter);
         if (departmentFilter) query.append("department", departmentFilter);
 
-        const res = await fetch(`http://localhost:8000/api/customers?${query.toString()}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/customers?${query.toString()}`);
         const data: PaginatedResponse = await res.json();
 
         setCustomers(data.data);
